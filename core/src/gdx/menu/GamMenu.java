@@ -2,6 +2,7 @@ package gdx.menu;
 import java.util.Iterator;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -17,13 +18,14 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.TimeUtils;
-
+import gdx.menu.Screens.ScrSimple;
 
 
 public class GamMenu extends Game {
     ScrMenu scrMenu;
     ScrMessages scrMessages;
     ScrCalculator scrCalculator;
+    ScrSimple scrSimple;
     int nScreen; // 0 for menu, 1 for play, and 2 for game over
     private Texture Token;
     private Texture Bag;
@@ -44,7 +46,7 @@ public class GamMenu extends Game {
         } else if (nScreen ==2) {
             setScreen(scrCalculator);
         } else if (nScreen == 3){
-            setScreen(scrCalculator);
+            setScreen(scrSimple);
         }
     }
 
@@ -54,6 +56,7 @@ public class GamMenu extends Game {
         scrMenu = new ScrMenu(this);
         scrMessages = new ScrMessages(this);
         scrCalculator = new ScrCalculator(this);
+        scrSimple = new ScrSimple(this);
         updateState(0);
         Token = new Texture(Gdx.files.internal("token.png"));
         Bag = new Texture(Gdx.files.internal("money-bag.png"));
@@ -75,22 +78,22 @@ public class GamMenu extends Game {
         bag.height = 80;
 
         tokens = new Array<Rectangle>();
-        spawnRaindrop();
+        spawnToken();
     }
 
-    private void spawnRaindrop() {
-        Rectangle raindrop = new Rectangle();
-        raindrop.x = MathUtils.random(0, 800-64);
-        raindrop.y = 480;
-        raindrop.width = 50;
-        raindrop.height = 50;
-        tokens.add(raindrop);
+    private void spawnToken() {
+        Rectangle token = new Rectangle();
+        token.x = MathUtils.random(0, 800-64);
+        token.y = 480;
+        token.width = 50;
+        token.height = 50;
+        tokens.add(token);
         lastDropTime = TimeUtils.nanoTime();
     }
 
     @Override
     public void render() {
-        Gdx.gl.glClearColor(0, 0, 0.2f, 1);
+        Gdx.gl.glClearColor(0, 0, 0, 0);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
         camera.update();
@@ -99,8 +102,8 @@ public class GamMenu extends Game {
 
         batch.begin();
         batch.draw(Bag, bag.x, bag.y);
-        for (Rectangle raindrop : tokens) {
-            batch.draw(Token, raindrop.x, raindrop.y);
+        for (Rectangle token : tokens) {
+            batch.draw(Token, token.x, token.y);
         }
         batch.end();
 
@@ -115,13 +118,13 @@ public class GamMenu extends Game {
 
         if (bag.x < 0) bag.x = 0;
         if (bag.x > 800 - 64) bag.x = 800 - 64;
-        if (TimeUtils.nanoTime() - lastDropTime > 1000000000) spawnRaindrop();
+        if (TimeUtils.nanoTime() - lastDropTime > 1000000000) spawnToken();
 
         for (Iterator<Rectangle> iter = tokens.iterator(); iter.hasNext(); ) {
-            Rectangle raindrop = iter.next();
-            raindrop.y -= 200 * Gdx.graphics.getDeltaTime();
-            if (raindrop.y + 64 < 0) iter.remove();
-            if (raindrop.overlaps(bag)) {
+            Rectangle token = iter.next();
+            token.y -= 200 * Gdx.graphics.getDeltaTime();
+            if (token.y + 64 < 0) iter.remove();
+            if (token.overlaps(bag)) {
                 dropSound.play();
                 iter.remove();
             }
