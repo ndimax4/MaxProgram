@@ -13,7 +13,6 @@ import gdx.menu.GamMenu;
 import gdx.menu.TbMenu;
 import gdx.menu.TbsMenu;
 
-import java.awt.Font;
 
 
 public class ScrMenu implements Screen, InputProcessor {

@@ -51,17 +51,16 @@ public class ScrCalculator implements Screen, InputProcessor {
         Gdx.gl.glClearColor(0, 0, 0, 1); //black background.
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         batch.begin();
-        screenName.draw(batch, "Messaging Software", 265, 475);
+        screenName.draw(batch, "Calculator Function", 265, 475);
         batch.end();
         stage.act();
         stage.draw();
-
     }
 
     public void btnMenuListener() {
         tbMenu.addListener(new ChangeListener() {
             public void changed(ChangeListener.ChangeEvent event, Actor actor) {
-               
+
                 gamMenu.updateState(0);
             }
         });
@@ -70,7 +69,7 @@ public class ScrCalculator implements Screen, InputProcessor {
     public void btnPlayListener() {
         tbMessages.addListener(new ChangeListener() {
             public void changed(ChangeListener.ChangeEvent event, Actor actor) {
-                
+
                 gamMenu.updateState(1);
             }
         });
