@@ -106,9 +106,6 @@ public class ScrSimple implements Screen, InputProcessor {
 
 
     public void render(float delta) {
-                stage.act();
-                stage.draw();
-
         camera.update();
 
         batch.setProjectionMatrix(camera.combined);
@@ -146,6 +143,8 @@ public class ScrSimple implements Screen, InputProcessor {
                 iter.remove();
             }
         }
+        stage.act();
+        stage.draw();
     }
 
     public void btnGameoverListener() {
