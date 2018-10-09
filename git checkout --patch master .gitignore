@@ -1,1 +1,2 @@
-
+git rm -r --cached .idea
+git rm -r --cached *.iml
