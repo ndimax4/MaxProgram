@@ -4,6 +4,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
+import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.scenes.scene2d.Actor;
@@ -22,6 +23,8 @@ public class ScrMenu implements Screen, InputProcessor {
     Stage stage;
     SpriteBatch batch;
     BitmapFont screenName;
+    private OrthographicCamera camera;
+    //private SpriteBatch batch;
 
     public ScrMenu(GamMenu _gamMenu) {  //Referencing the main class.
         gamMenu = _gamMenu;
@@ -32,8 +35,8 @@ public class ScrMenu implements Screen, InputProcessor {
         tbsMenu = new TbsMenu();
         batch = new SpriteBatch();
         screenName = new BitmapFont();
-        tbMessages = new TbMenu("Simple", tbsMenu);
-        tbSimple = new TbMenu("Messages", tbsMenu);
+        tbMessages = new TbMenu("Messages", tbsMenu);
+        tbSimple = new TbMenu("Simple", tbsMenu);
         tbCalculator = new TbMenu("Calculator", tbsMenu);
         tbSimple.setY(0);
         tbSimple.setX(220);
@@ -47,14 +50,18 @@ public class ScrMenu implements Screen, InputProcessor {
         Gdx.input.setInputProcessor(stage);
         btnPlayListener();
         btnGameoverListener();
-        btnCalculatorListener();
+        btnSimplerListener();
     }
 
     public void render(float delta) {
         Gdx.gl.glClearColor(0, 0, 0, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+
+        camera.update();
+        batch.setProjectionMatrix(camera.combined);
+
         batch.begin();
-        screenName.draw(batch, "Welcome to mFone", 265, 275);
+        screenName.draw(batch, "mPhone", 265, 275);
         batch.end();
         stage.act();
         stage.draw();
@@ -70,16 +77,15 @@ public class ScrMenu implements Screen, InputProcessor {
     }
 
     public void btnGameoverListener() {
-        tbSimple.addListener(new ChangeListener() {
+        tbCalculator.addListener(new ChangeListener() {
             public void changed(ChangeListener.ChangeEvent event, Actor actor) {               
                 gamMenu.updateState(2);
             }
         });
     }
 
-    public void btnCalculatorListener() {
-        tbCalculator.addListener(new ChangeListener() {
-            @Override
+    public void btnSimplerListener() {
+        tbSimple.addListener(new ChangeListener() {
             public void changed(ChangeEvent event, Actor actor) {
                 gamMenu.updateState(3);
             }

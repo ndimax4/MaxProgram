@@ -1,6 +1,9 @@
 package gdx.menu;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import gdx.menu.Screens.ScrCalculator;
 import gdx.menu.Screens.ScrMessages;
 import gdx.menu.Screens.ScrMenu;
 import gdx.menu.Screens.ScrSimple;
@@ -9,12 +12,11 @@ import com.badlogic.gdx.graphics.GL20;
 
 public class GamMenu extends Game {
     ScrMenu scrMenu;
-    ScrSimple scrMessages;
-    ScrMessages scrCalculator;
+    ScrMessages scrMessages;
+    ScrCalculator scrCalculator;
     ScrSimple scrSimple;
     int nScreen; // 0 for menu, 1 for play, and 2 for game over
 
-    
     public void updateState(int _nScreen) {
         nScreen = _nScreen;
         if ( nScreen == 0) {
@@ -32,8 +34,8 @@ public class GamMenu extends Game {
     public void create() {
         nScreen = 0;
         scrMenu = new ScrMenu(this);
-        scrMessages = new ScrSimple(this);
-        scrCalculator = new ScrMessages(this);
+        scrMessages = new ScrMessages(this);
+        scrCalculator = new ScrCalculator(this);
         scrSimple = new ScrSimple(this);
         updateState(0);
     }
@@ -41,6 +43,7 @@ public class GamMenu extends Game {
     @Override
     public void render() {
         super.render();
+
     }
 
 

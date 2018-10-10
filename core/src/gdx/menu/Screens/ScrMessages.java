@@ -4,6 +4,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
+import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.scenes.scene2d.Actor;
@@ -19,10 +20,12 @@ import java.awt.*;
 public class ScrMessages implements Screen, InputProcessor {
     GamMenu gamMenu;
     TbsMenu tbsMenu;
-    TbMenu tbMessages, tbMenu;
+    TbMenu tbMessages, tbMenu, tbSimple, tbCalculator;
     Stage stage;
     SpriteBatch batch;
     BitmapFont screenName;
+    private OrthographicCamera camera;
+    //private SpriteBatch batch;
 
 
     public ScrMessages(GamMenu _gamMenu) {  //Referencing the main class.
@@ -34,27 +37,34 @@ public class ScrMessages implements Screen, InputProcessor {
         tbsMenu = new TbsMenu();
         batch = new SpriteBatch();
         screenName = new BitmapFont();
-        tbMessages = new TbMenu("BACK", tbsMenu);
+        tbCalculator = new TbMenu("CALCULATOR", tbsMenu);
         tbMenu = new TbMenu("MENU", tbsMenu);
-        tbMessages.setY(0);
-        tbMessages.setX(0);
+        tbSimple = new TbMenu("SIMPLE", tbsMenu);
+        tbCalculator.setY(0);
+        tbCalculator.setX(0);
+        tbSimple.setY(0);
+        tbSimple.setX(220);
         tbMenu.setY(0);
         tbMenu.setX(440);
         stage.addActor(tbMenu);
-        stage.addActor(tbMessages);
+        stage.addActor(tbCalculator);
+        stage.addActor(tbSimple);
         Gdx.input.setInputProcessor(stage);
         btnMenuListener();
         btnPlayListener();
+        btnCalcListener();
     }
 
     public void render(float delta) {
         Gdx.gl.glClearColor(0, 0, 0, 1); //black background.
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+        camera.update();
+        batch.setProjectionMatrix(camera.combined);
         batch.begin();
         screenName.draw(batch, "Messaging Software", 265, 475);
-        batch.end();
-        stage.act();
+        batch.end();stage.act();
         stage.draw();
+
 
     }
 
@@ -66,12 +76,19 @@ public class ScrMessages implements Screen, InputProcessor {
             }
         });
     }
-
     public void btnPlayListener() {
-        tbMessages.addListener(new ChangeListener() {
+        tbSimple.addListener(new ChangeListener() {
             public void changed(ChangeListener.ChangeEvent event, Actor actor) {
                 
-                gamMenu.updateState(1);
+                gamMenu.updateState(3);
+            }
+        });
+    }
+    public void btnCalcListener() {
+        tbCalculator.addListener(new ChangeListener() {
+            public void changed(ChangeListener.ChangeEvent event, Actor actor) {
+
+                gamMenu.updateState(2);
             }
         });
     }

@@ -5,6 +5,7 @@ package gdx.menu.Screens;
  import com.badlogic.gdx.Screen;
  import com.badlogic.gdx.audio.Music;
  import com.badlogic.gdx.audio.Sound;
+ import com.badlogic.gdx.graphics.GL20;
  import com.badlogic.gdx.graphics.OrthographicCamera;
  import com.badlogic.gdx.graphics.Texture;
  import com.badlogic.gdx.graphics.g2d.BitmapFont;
@@ -26,7 +27,7 @@ package gdx.menu.Screens;
 public class ScrSimple implements Screen, InputProcessor {
     GamMenu gamMenu;
     TbsMenu tbsMenu;
-    TbMenu tbMenu, tbCalculator, tbSimple;
+    TbMenu tbMenu, tbCalculator, tbSimple, tbMessages;
     Stage stage;
     BitmapFont screenName;
     private Texture Token;
@@ -53,11 +54,11 @@ public class ScrSimple implements Screen, InputProcessor {
         screenName = new BitmapFont();
         tbMenu = new TbMenu("BACK", tbsMenu);
         tbCalculator = new TbMenu("Calculator", tbsMenu);
-        tbSimple = new TbMenu("Simple", tbsMenu);
+        tbMessages = new TbMenu("Messages", tbsMenu);
         tbMenu.setY(0);
         tbMenu.setX(0);
-        tbSimple.setY(0);
-        tbSimple.setX(220);
+        tbMessages.setY(0);
+        tbMessages.setX(220);
         tbCalculator.setY(0);
         tbCalculator.setX(440);
         stage.addActor(tbMenu);
@@ -65,6 +66,7 @@ public class ScrSimple implements Screen, InputProcessor {
         Gdx.input.setInputProcessor(stage);
         btnMenuListener();
         btnGameoverListener();
+        btnMessagesListener();
     }
 
     public void create() {
@@ -106,13 +108,15 @@ public class ScrSimple implements Screen, InputProcessor {
 
 
     public void render(float delta) {
+        Gdx.gl.glClearColor(0, 0, 0.2f, 1);
+        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         camera.update();
-
         batch.setProjectionMatrix(camera.combined);
 
         batch.begin();
         yourBitmapFontName.setColor(1.0f, 1.0f, 1.0f, 1.0f);
-        yourBitmapFontName.draw(batch, yourScoreName, 25, 500);
+        yourBitmapFontName.draw(batch, yourScoreName, 0, 500);
+        yourScoreName = "Score: " + score;
         batch.draw(Bag, bag.x, bag.y);
         for (Rectangle token : tokens) {
             batch.draw(Token, token.x, token.y);
@@ -138,20 +142,20 @@ public class ScrSimple implements Screen, InputProcessor {
             if (token.y + 64 < 0) iter.remove();
             if (token.overlaps(bag)) {
                 score++;
-                yourScoreName = "score: " + score;
                 dropSound.play();
                 iter.remove();
             }
         }
         stage.act();
         stage.draw();
+
     }
 
     public void btnGameoverListener() {
         tbCalculator.addListener(new ChangeListener() {
             public void changed(ChangeListener.ChangeEvent event, Actor actor) {
               
-                gamMenu.updateState(3);
+                gamMenu.updateState(2);
             }
         });
     }
@@ -161,6 +165,14 @@ public class ScrSimple implements Screen, InputProcessor {
             public void changed(ChangeListener.ChangeEvent event, Actor actor) {
                
                 gamMenu.updateState(0);
+            }
+        });
+    }
+    public void btnMessagesListener() {
+        tbMessages.addListener(new ChangeListener() {
+            public void changed(ChangeListener.ChangeEvent event, Actor actor) {
+
+                gamMenu.updateState(1);
             }
         });
     }
