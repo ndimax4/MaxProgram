@@ -14,13 +14,11 @@ import gdx.menu.GamMenu;
 import gdx.menu.TbMenu;
 import gdx.menu.TbsMenu;
 
-import java.awt.*;
-
 
 public class ScrMessages implements Screen, InputProcessor {
     GamMenu gamMenu;
     TbsMenu tbsMenu;
-    TbMenu tbMessages, tbMenu, tbSimple, tbCalculator;
+    TbMenu tbMessages, tbMenu, tbSimple, tbScroll;
     Stage stage;
     SpriteBatch batch;
     BitmapFont screenName;
@@ -37,17 +35,17 @@ public class ScrMessages implements Screen, InputProcessor {
         tbsMenu = new TbsMenu();
         batch = new SpriteBatch();
         screenName = new BitmapFont();
-        tbCalculator = new TbMenu("CALCULATOR", tbsMenu);
+        tbScroll = new TbMenu("SCROLL", tbsMenu);
         tbMenu = new TbMenu("MENU", tbsMenu);
         tbSimple = new TbMenu("SIMPLE", tbsMenu);
-        tbCalculator.setY(0);
-        tbCalculator.setX(0);
+        tbScroll.setY(0);
+        tbScroll.setX(0);
         tbSimple.setY(0);
         tbSimple.setX(220);
         tbMenu.setY(0);
         tbMenu.setX(440);
         stage.addActor(tbMenu);
-        stage.addActor(tbCalculator);
+        stage.addActor(tbScroll);
         stage.addActor(tbSimple);
         Gdx.input.setInputProcessor(stage);
         btnMenuListener();
@@ -58,11 +56,10 @@ public class ScrMessages implements Screen, InputProcessor {
     public void render(float delta) {
         Gdx.gl.glClearColor(0, 0, 0, 1); //black background.
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-        camera.update();
-        batch.setProjectionMatrix(camera.combined);
         batch.begin();
         screenName.draw(batch, "Messaging Software", 265, 475);
-        batch.end();stage.act();
+        batch.end();
+        stage.act();
         stage.draw();
 
 
@@ -85,7 +82,7 @@ public class ScrMessages implements Screen, InputProcessor {
         });
     }
     public void btnCalcListener() {
-        tbCalculator.addListener(new ChangeListener() {
+        tbScroll.addListener(new ChangeListener() {
             public void changed(ChangeListener.ChangeEvent event, Actor actor) {
 
                 gamMenu.updateState(2);
@@ -156,5 +153,9 @@ public class ScrMessages implements Screen, InputProcessor {
     @Override
     public boolean scrolled(int amount) {
         return false;
+    }
+
+    public void setCamera(OrthographicCamera camera) {
+        this.camera = camera;
     }
 }

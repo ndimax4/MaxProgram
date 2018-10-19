@@ -19,7 +19,7 @@ import gdx.menu.TbsMenu;
 public class ScrMenu implements Screen, InputProcessor {
     GamMenu gamMenu;
     TbsMenu tbsMenu;
-    TbMenu tbMessages, tbSimple, tbCalculator;
+    TbMenu tbMessages, tbSimple, tbScroll;
     Stage stage;
     SpriteBatch batch;
     BitmapFont screenName;
@@ -35,33 +35,30 @@ public class ScrMenu implements Screen, InputProcessor {
         tbsMenu = new TbsMenu();
         batch = new SpriteBatch();
         screenName = new BitmapFont();
-        tbMessages = new TbMenu("Messages", tbsMenu);
-        tbSimple = new TbMenu("Simple", tbsMenu);
-        tbCalculator = new TbMenu("Calculator", tbsMenu);
+        tbMessages = new TbMenu("MESSAGES", tbsMenu);
+        tbSimple = new TbMenu("SIMPLE", tbsMenu);
+        tbScroll = new TbMenu("SCROLL", tbsMenu);
         tbSimple.setY(0);
         tbSimple.setX(220);
         tbMessages.setY(0);
         tbMessages.setX(440);
-        tbCalculator.setY(0);
-        tbCalculator.setX(0);
+        tbScroll.setY(0);
+        tbScroll.setX(0);
         stage.addActor(tbMessages);
         stage.addActor(tbSimple);
-        stage.addActor((tbCalculator));
+        stage.addActor((tbScroll));
         Gdx.input.setInputProcessor(stage);
         btnPlayListener();
         btnGameoverListener();
-        btnSimplerListener();
+        btnSimpleListener();
     }
 
     public void render(float delta) {
         Gdx.gl.glClearColor(0, 0, 0, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
-        camera.update();
-        batch.setProjectionMatrix(camera.combined);
-
         batch.begin();
-        screenName.draw(batch, "mPhone", 265, 275);
+        screenName.draw(batch, "INTRODUCING THE mPHONE!!", 265, 275);
         batch.end();
         stage.act();
         stage.draw();
@@ -77,14 +74,14 @@ public class ScrMenu implements Screen, InputProcessor {
     }
 
     public void btnGameoverListener() {
-        tbCalculator.addListener(new ChangeListener() {
+        tbScroll.addListener(new ChangeListener() {
             public void changed(ChangeListener.ChangeEvent event, Actor actor) {               
                 gamMenu.updateState(2);
             }
         });
     }
 
-    public void btnSimplerListener() {
+    public void btnSimpleListener() {
         tbSimple.addListener(new ChangeListener() {
             public void changed(ChangeEvent event, Actor actor) {
                 gamMenu.updateState(3);
@@ -156,5 +153,9 @@ public class ScrMenu implements Screen, InputProcessor {
     @Override
     public boolean scrolled(int amount) {
         return false;
+    }
+
+    public void setCamera(OrthographicCamera camera) {
+        this.camera = camera;
     }
 }

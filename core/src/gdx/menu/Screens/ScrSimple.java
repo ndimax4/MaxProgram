@@ -27,7 +27,7 @@ package gdx.menu.Screens;
 public class ScrSimple implements Screen, InputProcessor {
     GamMenu gamMenu;
     TbsMenu tbsMenu;
-    TbMenu tbMenu, tbCalculator, tbSimple, tbMessages;
+    TbMenu tbMenu, tbScroll, tbSimple, tbMessages;
     Stage stage;
     BitmapFont screenName;
     private Texture Token;
@@ -53,70 +53,54 @@ public class ScrSimple implements Screen, InputProcessor {
         batch = new SpriteBatch();
         screenName = new BitmapFont();
         tbMenu = new TbMenu("BACK", tbsMenu);
-        tbCalculator = new TbMenu("Calculator", tbsMenu);
-        tbMessages = new TbMenu("Messages", tbsMenu);
+        tbScroll = new TbMenu("SCROLL", tbsMenu);
+        tbMessages = new TbMenu("MESSAGES", tbsMenu);
+        score = 0;
+        yourScoreName = "SCORE: 0";
+        yourBitmapFontName = new BitmapFont();
+        Token = new Texture(Gdx.files.internal("token.png"));
+        Bag = new Texture(Gdx.files.internal("money-bag.png"));
+        dropSound = Gdx.audio.newSound(Gdx.files.internal("coin.wav"));
+        BackMusic = Gdx.audio.newMusic(Gdx.files.internal("backmusic.mp3"));
+        camera = new OrthographicCamera();
+        camera.setToOrtho(false, 1280, 720);
+        batch = new SpriteBatch();
+        bag = new Rectangle();
+        bag.x = 800 / 2 - 64 / 2;
+        bag.y = 20;
+        bag.width = 80;
+        bag.height = 80;
+        tokens = new Array<Rectangle>();
+        spawnToken();
         tbMenu.setY(0);
         tbMenu.setX(0);
         tbMessages.setY(0);
         tbMessages.setX(220);
-        tbCalculator.setY(0);
-        tbCalculator.setX(440);
+        tbScroll.setY(0);
+        tbScroll.setX(440);
         stage.addActor(tbMenu);
-        stage.addActor(tbCalculator);
+        stage.addActor(tbScroll);
         Gdx.input.setInputProcessor(stage);
         btnMenuListener();
         btnGameoverListener();
         btnMessagesListener();
     }
 
-    public void create() {
-            score = 0;
-            yourScoreName = "score: 0";
-            yourBitmapFontName = new BitmapFont();
-            Token = new Texture(Gdx.files.internal("token.png"));
-            Bag = new Texture(Gdx.files.internal("money-bag.png"));
-
-            dropSound = Gdx.audio.newSound(Gdx.files.internal("coin.wav"));
-            BackMusic = Gdx.audio.newMusic(Gdx.files.internal("backmusic.mp3"));
-
-            BackMusic.setLooping(true);
-            BackMusic.play();
-
-            camera = new OrthographicCamera();
-            camera.setToOrtho(false, 1280, 720);
-            batch = new SpriteBatch();
-
-            bag = new Rectangle();
-            bag.x = 800 / 2 - 64 / 2;
-            bag.y = 20;
-            bag.width = 80;
-            bag.height = 80;
-
-            tokens = new Array<Rectangle>();
-            spawnToken();
-        }
-
-    private void spawnToken() {
-        Rectangle token = new Rectangle();
-        token.x = MathUtils.random(0, 800-64);
-        token.y = 480;
-        token.width = 50;
-        token.height = 50;
-        tokens.add(token);
-        lastDropTime = TimeUtils.nanoTime();
-    }
-
 
     public void render(float delta) {
         Gdx.gl.glClearColor(0, 0, 0.2f, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+
+        BackMusic.play();
+        BackMusic.setLooping(true);
+
         camera.update();
         batch.setProjectionMatrix(camera.combined);
 
         batch.begin();
         yourBitmapFontName.setColor(1.0f, 1.0f, 1.0f, 1.0f);
-        yourBitmapFontName.draw(batch, yourScoreName, 0, 500);
-        yourScoreName = "Score: " + score;
+        yourBitmapFontName.draw(batch, yourScoreName, 0, 700);
+        yourScoreName = "SCORE: " + score;
         batch.draw(Bag, bag.x, bag.y);
         for (Rectangle token : tokens) {
             batch.draw(Token, token.x, token.y);
@@ -150,11 +134,20 @@ public class ScrSimple implements Screen, InputProcessor {
         stage.draw();
 
     }
+    private void spawnToken() {
+        Rectangle token = new Rectangle();
+        token.x = MathUtils.random(0, 800-64);
+        token.y = 480;
+        token.width = 50;
+        token.height = 50;
+        tokens.add(token);
+        lastDropTime = TimeUtils.nanoTime();
+    }
 
     public void btnGameoverListener() {
-        tbCalculator.addListener(new ChangeListener() {
+        tbScroll.addListener(new ChangeListener() {
             public void changed(ChangeListener.ChangeEvent event, Actor actor) {
-              
+
                 gamMenu.updateState(2);
             }
         });
@@ -163,7 +156,7 @@ public class ScrSimple implements Screen, InputProcessor {
     public void btnMenuListener() {
         tbMenu.addListener(new ChangeListener() {
             public void changed(ChangeListener.ChangeEvent event, Actor actor) {
-               
+
                 gamMenu.updateState(0);
             }
         });

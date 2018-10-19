@@ -1,15 +1,19 @@
 package gdx.menu.Screens;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
+import com.badlogic.gdx.utils.TimeUtils;
 import gdx.menu.GamMenu;
 import gdx.menu.TbMenu;
 import gdx.menu.TbsMenu;
@@ -17,18 +21,24 @@ import gdx.menu.TbsMenu;
 import java.awt.*;
 
 
-public class ScrCalculator implements Screen, InputProcessor {
+public class ScrScroll implements Screen, InputProcessor {
     GamMenu gamMenu;
     TbsMenu tbsMenu;
     TbMenu tbMessages, tbMenu, tbSimple;
     Stage stage;
     SpriteBatch batch;
     BitmapFont screenName;
-    private OrthographicCamera camera;
-    //private SpriteBatch batch;
+    OrthographicCamera camera;
+    Texture background;
+    float currentBgX;
+    long lastTimeBg;
+    Texture TxBall;
+    Sprite sprBall;
+    float spriteXposition = -400;
+    float spriteYposition = -50;
 
 
-    public ScrCalculator(GamMenu _gamMenu) {  //Referencing the main class.
+    public ScrScroll(GamMenu _gamMenu) {  //Referencing the main class.
         gamMenu = _gamMenu;
     }
 
@@ -40,6 +50,13 @@ public class ScrCalculator implements Screen, InputProcessor {
         tbMessages = new TbMenu("BACK", tbsMenu);
         tbMenu = new TbMenu("MENU", tbsMenu);
         tbSimple = new TbMenu("SIMPLE", tbsMenu);
+        camera = new OrthographicCamera();
+        camera.setToOrtho(false, 800, 480);
+        background = new Texture(Gdx.files.internal("bg.png"));
+        currentBgX = 800;
+        lastTimeBg = TimeUtils.nanoTime();
+        TxBall = new Texture("Ball.png");
+        sprBall = new Sprite(TxBall);
         tbMessages.setY(0);
         tbMessages.setX(0);
         tbSimple.setY(0);
@@ -58,13 +75,31 @@ public class ScrCalculator implements Screen, InputProcessor {
     public void render(float delta) {
         Gdx.gl.glClearColor(0, 0, 0, 1); //black background.
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-        camera.update();
-        batch.setProjectionMatrix(camera.combined);
         batch.begin();
-        screenName.draw(batch, "Calculator Function", 265, 475);
+        batch.draw(background, currentBgX - 800, 0);
+        batch.draw(background, currentBgX, 0);
+        sprBall.setPosition(spriteXposition, spriteYposition);
+        sprBall.draw(batch);
         batch.end();
+        spriteControl();
+        if(TimeUtils.nanoTime() - lastTimeBg > 100000000){
+            currentBgX -= 50;
+            lastTimeBg = TimeUtils.nanoTime();
+        }
+        if(currentBgX == 0){
+            currentBgX = 800;
+        }
         stage.act();
         stage.draw();
+    }
+
+    public void spriteControl() {
+        if(Gdx.input.isKeyPressed(Input.Keys.UP)) {
+            spriteYposition+= 5;
+        }
+        if(Gdx.input.isKeyPressed(Input.Keys.DOWN)) {
+            spriteYposition-= 5;
+        }
     }
 
     public void btnMenuListener() {
@@ -155,5 +190,9 @@ public class ScrCalculator implements Screen, InputProcessor {
     @Override
     public boolean scrolled(int amount) {
         return false;
+    }
+
+    public void setCamera(OrthographicCamera camera) {
+        this.camera = camera;
     }
 }
