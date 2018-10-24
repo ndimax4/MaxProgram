@@ -18,8 +18,6 @@ import gdx.menu.GamMenu;
 import gdx.menu.TbMenu;
 import gdx.menu.TbsMenu;
 
-import java.awt.*;
-
 
 public class ScrScroll implements Screen, InputProcessor {
     GamMenu gamMenu;
@@ -34,7 +32,7 @@ public class ScrScroll implements Screen, InputProcessor {
     long lastTimeBg;
     Texture TxBall;
     Sprite sprBall;
-    float spriteXposition = -400;
+    float spriteXposition = -420;
     float spriteYposition = -50;
 
 
