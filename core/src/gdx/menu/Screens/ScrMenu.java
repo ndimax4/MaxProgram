@@ -58,7 +58,7 @@ public class ScrMenu implements Screen, InputProcessor {
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
         batch.begin();
-        screenName.draw(batch, "INTRODUCING THE mPHONE!!", 265, 275);
+        screenName.draw(batch, "MPhone", 265, 275);
         batch.end();
         stage.act();
         stage.draw();

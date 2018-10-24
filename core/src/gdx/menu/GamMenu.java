@@ -1,25 +1,21 @@
 package gdx.menu;
+
 import com.badlogic.gdx.Game;
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.scenes.scene2d.Actor;
-import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.scenes.scene2d.ui.Label;
-import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
-import com.badlogic.gdx.scenes.scene2d.ui.TextField;
-import gdx.menu.Screens.ScrScroll;
 import gdx.menu.Screens.ScrMenu;
 import gdx.menu.Screens.ScrMessages;
+import gdx.menu.Screens.ScrScroll;
 import gdx.menu.Screens.ScrSimple;
+import javafx.stage.Stage;
 
 
 public class GamMenu extends Game {
+    int nScreen;
     ScrMenu scrMenu;
     ScrMessages scrMessages;
     ScrScroll scrScroll;
     ScrSimple scrSimple;
     Stage stage;
-    int nScreen;
     int rowActors;
     int columnActors;
     Table table;
@@ -44,21 +40,22 @@ public class GamMenu extends Game {
         scrMessages = new ScrMessages(this);
         scrScroll = new ScrScroll(this);
         scrSimple = new ScrSimple(this);
-        table = new Table();
-        table.setFillParent(true);
-        stage.addActor(table);
-        int actorWidth = Gdx.graphics.getWidth() / rowActors;
-        int actorHeight = Gdx.graphics.getHeight() /  columnActors;
-        Actor[] actors = new Actor[rowActors * columnActors];
         updateState(0);
 
-        for (int i = 0; i < rowActors; i++){
-            for (int j = 0; j < columnActors; j++){
-                Actor actor = actors[(i * columnActors) + j];
-                table.add(actor).width(actorWidth).height(actorHeight);
-            }
-            table.row();
-        }
+        //table = new Table();
+        //table.setFillParent(true);
+        //table.addActor();
+        //int actorWidth = Gdx.graphics.getWidth() / rowActors;
+        //int actorHeight = Gdx.graphics.getHeight() /  columnActors;
+        //Actor[] actors = new Actor[rowActors * columnActors];
+
+        //for (int i = 0; i < rowActors; i++){
+        //for (int j = 0; j < columnActors; j++){
+            //Actor actor = actors[(i * columnActors) + j];
+        //table.add(actor).width(actorWidth).height(actorHeight);
+        //}
+        //table.row();
+        //}
     }
 
     @Override
